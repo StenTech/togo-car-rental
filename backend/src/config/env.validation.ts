@@ -15,4 +15,8 @@ export const envValidationSchema = Joi.object({
   
   // URL construite automatiquement par le ConfigModule ou Prisma, mais utile de valider si fournie
   DATABASE_URL: Joi.string().optional(),
+  
+  // Sécurité JWT
+  JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRES_IN: Joi.string().default('1d'),
 });
