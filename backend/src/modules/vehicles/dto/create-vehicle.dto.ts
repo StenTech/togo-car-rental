@@ -29,7 +29,14 @@ export class CreateVehicleDto {
   @IsString()
   @IsNotEmpty()
   plate: string;
-
+  @ApiProperty({
+    example: 'http://localhost:9000/bucket/image.jpg',
+    description: "URL de l'image du véhicule",
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
   @ApiProperty({
     enum: VehicleCategory,
     example: VehicleCategory.SEDAN,
