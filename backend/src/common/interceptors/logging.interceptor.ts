@@ -24,9 +24,17 @@ export class LoggingInterceptor implements NestInterceptor {
       tap(() => {
         const response = ctx.getResponse<Response>();
         const delay = Date.now() - now;
-        this.logger.log(
-          `${method} ${url} ${response.statusCode} - ${delay}ms - ${ip} - ${userAgent}`,
-        );
+
+        // Structure de log "Elite" : Objet JSON pur pour faciliter l'ingestion (ELK/Datadog)
+        this.logger.log({
+          message: `HTTP Request ${method} ${url}`,
+          method,
+          url,
+          statusCode: response.statusCode,
+          durationMs: delay,
+          ip,
+          userAgent,
+        });
       }),
     );
   }

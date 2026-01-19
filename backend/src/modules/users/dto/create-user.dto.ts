@@ -5,6 +5,7 @@ import {
   MinLength,
   Matches,
   IsEnum,
+  IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
@@ -48,6 +49,7 @@ export class CreateUserDto {
     description: "Rôle de l'utilisateur",
   })
   @IsEnum(UserRole)
+  @IsOptional()
   // Le rôle est optionnel à la création publique (défaut: USER),
   // mais pourrait être forcé par un admin.
   role?: UserRole;
