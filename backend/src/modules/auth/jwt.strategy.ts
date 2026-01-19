@@ -2,6 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 interface JwtPayload {
   sub: string;
@@ -13,8 +14,13 @@ interface JwtPayload {
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigService) {
     super({
-      // Extraction du token depuis le header Authorization: Bearer <token>
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // Extraction du token depuis le header Authorization OU le cookie Authentication
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          return request?.cookies?.Authentication;
+        },
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false, // Rejette automatiquement les tokens expirés
       // On utilise le ! car Joi valide que la variable existe au démarrage
       secretOrKey: configService.get<string>('JWT_SECRET')!,

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -26,9 +27,13 @@ async function bootstrap() {
 
   // 1. Sécurité (Helmet)
   app.use(helmet());
+  app.use(cookieParser());
 
   // 2. CORS (Cross-Origin Resource Sharing)
-  app.enableCors(); // À configurer plus finement pour la prod
+  app.enableCors({
+    origin: ['http://localhost:3001', 'http://127.0.0.1:3001'],
+    credentials: true,
+  });
 
   // 3. Validation Globale (DTOs)
   app.useGlobalPipes(

@@ -30,12 +30,14 @@
     "@nestjs/swagger": "^11.2.5",
     "@prisma/client": "^6.19.2",
     "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
     "@types/multer": "^2.0.0",
     "@types/passport-jwt": "^4.0.1",
     "@types/uuid": "^9.0.8",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
+    "cookie-parser": "^1.4.7",
     "helmet": "^8.1.0",
     "joi": "^18.0.2",
     "nest-winston": "^1.10.2",
@@ -69,6 +71,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^1.7.1",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
@@ -88,5 +91,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

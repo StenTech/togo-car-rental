@@ -24,9 +24,26 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { User, UserRole } from '@prisma/client';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+// Fix pour TS1272 : Import explicite du type si utilisé uniquement en typage
+import type { User } from '@prisma/client';
+import { UserRole } from '@prisma/client';
+
+// Import type nécessaire pour éviter l'erreur TS1272 avec isolatedModules
+// Cependant, NestJS utilise les types pour l'injection, donc on doit faire attention.
+// L'erreur spécifique "A type referenced in a decorated signature must be imported..." 
+// suggère ici qu'il faut utiliser la classe concrète si on veut des métadonnées,
+// ou que User est un type prisma généré.
+// Prisma génère des types. Essayons de réimporter de façon explicite ou passer 'any' dans le decorateur si besoin,
+// mais ici c'est juste le typage typescript qui râle.
+// Une solution classique est de ne pas utiliser le type Prisma directement dans la signature du controlleur 
+// si NestJS essaie de l'utiliser pour la DI (ce qu'il ne fait pas pour @CurrentUser normalement).
+// Le fix simple est souvent de s'assurer que c'est bien une valeur importée ou d'utiliser un DTO si possible.
+// Mais pour User de prisma, c'est une interface/type.
+// On va laisser l'import tel quel mais vérifier tsconfig ou utiliser un DTO User si nécessaire.
+// Tentative : utiliser un alias ou vérifier l'import.
+
 
 @ApiTags('Reservations')
 @Controller('reservations')

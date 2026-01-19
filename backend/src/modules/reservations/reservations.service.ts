@@ -7,7 +7,7 @@ import {
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { CheckAvailabilityDto } from './dto/check-availability.dto';
-import { ReservationStatus, User, VehicleStatus } from '@prisma/client';
+import { ReservationStatus, User, VehicleStatus, Vehicle } from '@prisma/client';
 
 @Injectable()
 export class ReservationsService {
@@ -145,8 +145,8 @@ export class ReservationsService {
     });
 
     const isAvailable = conflicts.length === 0;
-    const alternatives = [];
-    const negotiationList = [];
+    const alternatives: Vehicle[] = [];
+    const negotiationList: any[] = [];
 
     // 3. Si non disponible, chercher des alternatives intelligentes (Même catégorie)
     if (!isAvailable) {
@@ -181,6 +181,8 @@ export class ReservationsService {
           alternatives.push(candidate);
         } else {
           // Si conflits partiels, on les stocke pour la "gestion de crise"
+          // Utilisation de 'as any' pour contourner le typage strict de 'never' dans negotiationList temporairement
+          // ou mieux, typer negotiationList correctement.
           negotiationList.push({
             vehicle: candidate,
             bookedBy: `${candidateConflict.user.firstName} ${candidateConflict.user.lastName}`,

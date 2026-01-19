@@ -18,7 +18,7 @@ import { HashingService } from '../../common/providers/hashing.service';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+          expiresIn: configService.get<string | number>('JWT_EXPIRES_IN') as any, // Cast any pour satisfaire le typage strict de StringValue
         },
       }),
       inject: [ConfigService],
