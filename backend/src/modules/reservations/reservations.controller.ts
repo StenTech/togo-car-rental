@@ -89,4 +89,33 @@ export class ReservationsController {
   cancel(@CurrentUser() user: User, @Param('id', ParseUUIDPipe) id: string) {
     return this.reservationsService.cancel(user.id, id);
   }
+
+  @Post(':id/pickup')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: 'Marquer le départ du véhicule (Admin)',
+    description:
+      'Passe le statut à IN_PROGRESS. Indique que le client a récupéré les clés.',
+  })
+  @ApiOkResponse({ description: 'Statut mis à jour vers IN_PROGRESS.' })
+  @ApiBadRequestResponse({
+    description: 'Mauvais état initial (doit être PENDING/CONFIRMED).',
+  })
+  pickup(@Param('id', ParseUUIDPipe) id: string) {
+    return this.reservationsService.markAsPickedUp(id);
+  }
+
+  @Post(':id/return')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: 'Marquer le retour du véhicule (Admin)',
+    description: 'Passe le statut à COMPLETED. Le véhicule est rendu.',
+  })
+  @ApiOkResponse({ description: 'Statut mis à jour vers COMPLETED.' })
+  @ApiBadRequestResponse({
+    description: 'Mauvais état initial (doit être IN_PROGRESS).',
+  })
+  returnVehicle(@Param('id', ParseUUIDPipe) id: string) {
+    return this.reservationsService.markAsReturned(id);
+  }
 }

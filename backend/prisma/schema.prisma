@@ -40,6 +40,7 @@ enum VehicleStatus {
 enum ReservationStatus {
   PENDING
   CONFIRMED
+  IN_PROGRESS
   CANCELLED
   COMPLETED
 }

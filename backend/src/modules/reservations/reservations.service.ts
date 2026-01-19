@@ -206,4 +206,80 @@ export class ReservationsService {
         alternatives.length === 0 && !isAvailable ? negotiationList : [],
     };
   }
+
+  // --- ADMINISTRATION DE LA FLOTTE (FLUX PHYSIQUE) ---
+
+  /**
+   * Marquer le véhicule comme "Récupéré par le client" (Pickup)
+   * Passe la réservation en IN_PROGRESS.
+   * Admin only.
+   */
+  async markAsPickedUp(id: string) {
+    const reservation = await this.prisma.reservation.findUnique({
+      where: { id },
+      include: { vehicle: true },
+    });
+
+    if (!reservation) {
+      throw new NotFoundException('Réservation introuvable.');
+    }
+
+    // Règles métier strictes
+    if (
+      reservation.status !== ReservationStatus.CONFIRMED &&
+      reservation.status !== ReservationStatus.PENDING
+    ) {
+      throw new BadRequestException(
+        `Impossible de démarrer une réservation au statut ${reservation.status}. Elle doit être PENDING ou CONFIRMED.`,
+      );
+    }
+
+    // Vérifier si le véhicule est bien AVAILABLE (physiquement là)
+    if (reservation.vehicle.status !== VehicleStatus.AVAILABLE) {
+      throw new ConflictException(
+        "Le véhicule n'est pas marqué comme DISPONIBLE (Maintenance ou autre utilisation en cours).",
+      );
+    }
+
+    // Transaction atomique : Update Réservation + Update Véhicule (Optionnel mais recommandé pour suivi)
+    // Ici, le status du véhicule change-t-il ?
+    // Dans le schema actuel, VehicleStatus a AVAILABLE, MAINTENANCE, OUT_OF_SERVICE.
+    // Il manque "IN_USE" dans VehicleStatus... C'est un point d'amélioration.
+    // Pour l'instant on garde le véhicule AVAILABLE en base, mais la réservation est IN_PROGRESS.
+    // L'algo de disponibilité checkAvailability utilise les réservations, donc ça bloque quand même les autres dates.
+
+    return this.prisma.reservation.update({
+      where: { id },
+      data: { status: ReservationStatus.IN_PROGRESS },
+    });
+  }
+
+  /**
+   * Marquer le véhicule comme "Retourné" (Return)
+   * Passe la réservation en COMPLETED.
+   * Admin only.
+   */
+  async markAsReturned(id: string) {
+    const reservation = await this.prisma.reservation.findUnique({
+      where: { id },
+    });
+
+    if (!reservation) {
+      throw new NotFoundException('Réservation introuvable.');
+    }
+
+    if (reservation.status !== ReservationStatus.IN_PROGRESS) {
+      throw new BadRequestException(
+        "Impossible de terminer une réservation qui n'est pas EN COURS (IN_PROGRESS).",
+      );
+    }
+
+    // Ici, on pourrait ajouter un check des dommages, kilométrage etc.
+    // Pour le MVP : simple clôture.
+
+    return this.prisma.reservation.update({
+      where: { id },
+      data: { status: ReservationStatus.COMPLETED },
+    });
+  }
 }
