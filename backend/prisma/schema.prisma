@@ -6,10 +6,100 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  // Génération standard vers node_modules
+  output   = "../node_modules/@prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// --- ENUMS ---
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum VehicleCategory {
+  SEDAN
+  SUV
+  VAN
+  PICKUP
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  MAINTENANCE
+  OUT_OF_SERVICE
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// --- MODELS ---
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashé avec Bcrypt
+  firstName String
+  lastName  String
+  role      UserRole @default(USER)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Soft delete
+
+  reservations Reservation[]
+
+  @@map("users")
+}
+
+model Vehicle {
+  id           String          @id @default(uuid())
+  brand        String
+  model        String
+  year         Int
+  plate        String          @unique
+  category     VehicleCategory
+  status       VehicleStatus   @default(AVAILABLE)
+  imageUrl     String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Soft delete
+
+  reservations Reservation[]
+
+  @@map("vehicles")
+}
+
+model Reservation {
+  id        String            @id @default(uuid())
+  
+  startDate DateTime
+  endDate   DateTime
+  reason    String
+  status    ReservationStatus @default(PENDING)
+  
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  cancelledAt DateTime?
+
+  // Index de performance pour la détection de conflits (Règle Métier R1)
+  @@index([vehicleId, startDate, endDate])
+  @@map("reservations")
 }
