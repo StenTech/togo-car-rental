@@ -7,9 +7,11 @@ import {
   Delete,
   UseGuards,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import { CheckAvailabilityDto } from './dto/check-availability.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -28,6 +30,16 @@ import { Roles } from '../../common/decorators/roles.decorator';
 @ApiBearerAuth()
 export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
+
+  @Get('availability/check')
+  @ApiOperation({
+    summary: 'Assistant intelligent de disponibilité (check & suggest)',
+    description:
+      'Vérifie si un véhicule est libre. Sinon, retourne les conflits (qui a réservé) et propose des alternatives (véhicules libres de même catégorie).',
+  })
+  checkAvailability(@Query() query: CheckAvailabilityDto) {
+    return this.reservationsService.checkAvailability(query);
+  }
 
   @Post()
   @ApiOperation({
