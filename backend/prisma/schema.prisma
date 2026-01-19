@@ -25,6 +25,10 @@ enum VehicleCategory {
   SUV
   VAN
   PICKUP
+  MOTORCYCLE
+  TRUCK
+  BUS
+  OTHER
 }
 
 enum VehicleStatus {
@@ -66,7 +70,6 @@ model Vehicle {
   year         Int
   plate        String          @unique
   category     VehicleCategory
-  dailyRate    Int             // Prix journalier en FCFA
   status       VehicleStatus   @default(AVAILABLE)
   imageUrl     String?
 

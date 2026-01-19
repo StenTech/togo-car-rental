@@ -146,6 +146,7 @@ export class ReservationsService {
 
     const isAvailable = conflicts.length === 0;
     const alternatives = [];
+    const negotiationList = [];
 
     // 3. Si non disponible, chercher des alternatives intelligentes (Même catégorie)
     if (!isAvailable) {
@@ -159,10 +160,8 @@ export class ReservationsService {
       });
 
       // Filtrer ceux qui sont libres sur le créneau
-      // Note: Pour une grosse base de données, on ferait cette exclusion en SQL direct (NOT EXISTS)
-      // Mais ici en JS c'est plus lisible pour la démonstration logique
       for (const candidate of candidates) {
-        const candidateConflicts = await this.prisma.reservation.findFirst({
+        const candidateConflict = await this.prisma.reservation.findFirst({
           where: {
             vehicleId: candidate.id,
             status: {
@@ -173,10 +172,21 @@ export class ReservationsService {
               { endDate: { gte: startDate } },
             ],
           },
+          include: {
+            user: { select: { firstName: true, lastName: true } },
+          },
         });
 
-        if (!candidateConflicts) {
+        if (!candidateConflict) {
           alternatives.push(candidate);
+        } else {
+          // Si conflits partiels, on les stocke pour la "gestion de crise"
+          negotiationList.push({
+            vehicle: candidate,
+            bookedBy: `${candidateConflict.user.firstName} ${candidateConflict.user.lastName}`,
+            end: candidateConflict.endDate,
+            reason: candidateConflict.reason,
+          });
         }
       }
     }
@@ -191,6 +201,9 @@ export class ReservationsService {
         reason: c.reason,
       })),
       alternatives,
+      // Si aucune alternative n'est trouvée, on propose la liste globale pour négociation
+      negotiationSuggestions:
+        alternatives.length === 0 && !isAvailable ? negotiationList : [],
     };
   }
 }

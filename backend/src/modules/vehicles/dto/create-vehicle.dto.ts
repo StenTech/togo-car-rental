@@ -2,7 +2,6 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   Min,
@@ -39,11 +38,6 @@ export class CreateVehicleDto {
   @IsEnum(VehicleCategory)
   @IsNotEmpty()
   category: VehicleCategory;
-
-  @ApiProperty({ example: 25000, description: 'Prix journalier en FCFA' })
-  @IsNumber()
-  @Min(0)
-  dailyRate: number;
 
   @ApiProperty({
     enum: VehicleStatus,
