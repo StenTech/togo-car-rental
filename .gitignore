@@ -33,3 +33,7 @@ Thumbs.db
 
 # React (Frontend)
 frontend/.eslintcache
+
+
+# github copilot
+.github/copilot-instructions.md

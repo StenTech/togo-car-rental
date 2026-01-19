@@ -28,6 +28,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         : 'Internal server error';
 
     // Log de l'erreur (important pour le débogage)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error(
         `Erreur critique sur ${request.method} ${request.url}`,

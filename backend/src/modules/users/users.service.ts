@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,7 +20,9 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       // 1. Hachage du mot de passe
-      const hashedPassword = await this.hashingService.hash(createUserDto.password);
+      const hashedPassword = await this.hashingService.hash(
+        createUserDto.password,
+      );
 
       // 2. Création de l'utilisateur
       const user = await this.prisma.user.create({
@@ -28,10 +35,15 @@ export class UsersService {
       return user;
     } catch (error) {
       // Gestion de l'erreur d'unicité (P2002 code Prisma)
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new ConflictException('Cet email est déjà utilisé.');
       }
-      throw new InternalServerErrorException('Erreur lors de la création de l\'utilisateur.');
+      throw new InternalServerErrorException(
+        "Erreur lors de la création de l'utilisateur.",
+      );
     }
   }
 
@@ -52,7 +64,7 @@ export class UsersService {
     }
     return user;
   }
-  
+
   async findByEmail(email: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -64,7 +76,9 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     // Si mise à jour mot de passe, il faut le re-hacher
     if (updateUserDto.password) {
-        updateUserDto.password = await this.hashingService.hash(updateUserDto.password);
+      updateUserDto.password = await this.hashingService.hash(
+        updateUserDto.password,
+      );
     }
 
     try {
@@ -73,10 +87,13 @@ export class UsersService {
         data: updateUserDto,
       });
     } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-            throw new NotFoundException(`Utilisateur #${id} introuvable.`);
-        }
-        throw error;
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Utilisateur #${id} introuvable.`);
+      }
+      throw error;
     }
   }
 

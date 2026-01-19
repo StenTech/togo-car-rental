@@ -3,6 +3,12 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+interface JwtPayload {
+  sub: string;
+  email: string;
+  role: string;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigService) {
@@ -10,16 +16,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // Extraction du token depuis le header Authorization: Bearer <token>
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false, // Rejette automatiquement les tokens expirés
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      // On utilise le ! car Joi valide que la variable existe au démarrage
+      secretOrKey: configService.get<string>('JWT_SECRET')!,
     });
   }
 
   // Cette méthode est appelée si le token est valide et décodé
-  async validate(payload: any) {
+  validate(payload: JwtPayload) {
     // Le payload contient ce qu'on a mis dans le token (sub, email, role)
     // On retourne un objet simple qui sera injecté dans request.user
     if (!payload.sub) {
-        throw new UnauthorizedException();
+      throw new UnauthorizedException();
     }
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }

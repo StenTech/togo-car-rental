@@ -18,6 +18,7 @@ export class AuthService {
     // Mais on pourrait vouloir retourner un token directement après l'inscription
     const user = await this.usersService.create(createUserDto);
     // On retire le mot de passe de la réponse (sécurité)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }

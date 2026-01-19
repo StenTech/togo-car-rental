@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -22,7 +22,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        const response = ctx.getResponse();
+        const response = ctx.getResponse<Response>();
         const delay = Date.now() - now;
         this.logger.log(
           `${method} ${url} ${response.statusCode} - ${delay}ms - ${ip} - ${userAgent}`,

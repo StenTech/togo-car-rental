@@ -1,9 +1,24 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Get, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Get,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -20,7 +35,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Connexion (Obtenir JWT)' })
-  @ApiResponse({ status: 200, description: 'Authentification réussie, retourne le token' })
+  @ApiResponse({
+    status: 200,
+    description: 'Authentification réussie, retourne le token',
+  })
   @ApiResponse({ status: 401, description: 'Identifiants invalides' })
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
@@ -29,8 +47,12 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Obtenir le profil de l\'utilisateur connecté (Protegé)' })
-  getProfile(@Request() req) {
-    return req.user;
+  @ApiOperation({
+    summary: "Obtenir le profil de l'utilisateur connecté (Protegé)",
+  })
+  getProfile(
+    @CurrentUser() user: { userId: string; email: string; role: string },
+  ) {
+    return user;
   }
 }
