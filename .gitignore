@@ -30,7 +30,6 @@ Thumbs.db
 *.njsproj
 
 # NestJS (Backend)
-# (Géré principalement par dist/ et node_modules/)
 
 # React (Frontend)
 frontend/.eslintcache
