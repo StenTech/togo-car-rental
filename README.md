@@ -1,12 +1,12 @@
-# 🚗 Togo Car Rental
+# Togo Car Rental
 
 Application web moderne de gestion de location de véhicules, développée avec une architecture monorepo full-stack.
 
-## 📋 Vue d'ensemble
+## Vue d'ensemble
 
 **Togo Car Rental** est une plateforme complète permettant la gestion des véhicules, des réservations et des utilisateurs. Le projet implémente une architecture Clean avec séparation stricte des responsabilités, suivant les principes SOLID et les meilleures pratiques de développement.
 
-## ⚡ Quick Start - Démarrage Rapide (5 minutes)
+## Quick Start - Démarrage Rapide (5 minutes)
 
 ### Option A : Avec Docker (Recommandé - Tout automatique)
 
@@ -74,28 +74,28 @@ npm run dev  # ✅ Frontend démarre sur http://localhost:3000
 # 📚 Documentation API: http://localhost:3001/api
 ```
 
-### 🎯 Premiers pas après l'installation
+### Premiers pas après l'installation
 
 1. **Créer un compte admin** : Accédez à http://localhost:3000/register
 2. **Ajouter des véhicules** : Interface admin à http://localhost:3000/admin/vehicles
 3. **Créer une réservation** : Tableau de bord à http://localhost:3000/dashboard
 
-### 🎯 Fonctionnalités principales
+### Fonctionnalités principales
 
 #### Pour les utilisateurs
-- 🔐 **Authentification sécurisée** : Inscription/Connexion avec JWT + HttpOnly Cookies
-- 📅 **Réservation de véhicules** : Système de réservation avec détection de conflits
-- 🔍 **Catalogue de véhicules** : Consultation des véhicules disponibles avec images
-- 👤 **Profil utilisateur** : Gestion des informations personnelles
+- **Authentification sécurisée** : Inscription/Connexion avec JWT + HttpOnly Cookies
+- **Réservation de véhicules** : Système de réservation avec détection de conflits
+- **Catalogue de véhicules** : Consultation des véhicules disponibles avec images
+- **Profil utilisateur** : Gestion des informations personnelles
 
 #### Pour les administrateurs
-- 🚙 **Gestion des véhicules** : CRUD complet (Création, Lecture, Mise à jour, Suppression)
-- 📸 **Upload d'images** : Stockage MinIO avec génération automatique d'URLs signées
-- 📊 **Tableau de bord** : Vue d'ensemble des statistiques
-- 👥 **Gestion des utilisateurs** : Administration des comptes
-- 📋 **Gestion des réservations** : Validation et suivi des réservations
+- **Gestion des véhicules** : CRUD complet (Création, Lecture, Mise à jour, Suppression)
+- **Upload d'images** : Stockage MinIO avec génération automatique d'URLs signées
+- **Tableau de bord** : Vue d'ensemble des statistiques
+- **Gestion des utilisateurs** : Administration des comptes
+- **Gestion des réservations** : Validation et suivi des réservations
 
-## 🛠 Stack Technique
+## Stack Technique
 
 ### Backend (NestJS)
 
@@ -176,7 +176,7 @@ npm run dev  # ✅ Frontend démarre sur http://localhost:3000
 - **Git** - Contrôle de version
 - **GitHub** - Hébergement du code source
 
-## 📁 Architecture du Projet
+## Architecture du Projet
 
 ```
 togo-car-rental/
@@ -222,7 +222,7 @@ togo-car-rental/
 └── README.md                     # Documentation (ce fichier)
 ```
 
-## 🚀 Installation et Démarrage
+## Installation et Démarrage
 
 ### Prérequis
 
@@ -330,7 +330,7 @@ cd frontend
 npm run dev
 ```
 
-## 📘 Utilisation
+## Utilisation
 
 ### Authentification
 
@@ -434,7 +434,7 @@ GET /api/reservations/my-reservations
 Authorization: Bearer <token>
 ```
 
-## 🎨 Principes de Développement
+## Principes de Développement
 
 ### Architecture Backend
 
@@ -522,7 +522,7 @@ export interface Vehicle {
 }
 ```
 
-## 🧪 Tests
+## Tests
 
 ### Backend (Jest)
 
@@ -548,7 +548,7 @@ cd frontend
 npm run test
 ```
 
-## 📊 Schéma de Base de Données
+## Schéma de Base de Données
 
 ### Tables Principales
 
@@ -608,7 +608,7 @@ model Reservation {
 User (1) ──────< (N) Reservation (N) >────── (1) Vehicle
 ```
 
-## 🔧 Configuration Avancée
+## Configuration Avancée
 
 ### Variables d'environnement Backend
 
@@ -629,7 +629,7 @@ User (1) ──────< (N) Reservation (N) >────── (1) Vehicle
 |----------|-------------|-------------------|
 | `NEXT_PUBLIC_API_URL` | URL de l'API | `http://localhost:3001` |
 
-## 🐛 Dépannage
+## Dépannage
 
 ### Le backend ne démarre pas
 
@@ -664,7 +664,7 @@ docker-compose exec minio mc mb /data/vehicle-images
 - Accéder à la console MinIO : http://localhost:9001
 - Vérifier les logs : `docker logs minio`
 
-## 📚 Ressources
+## Ressources
 
 ### Documentation des Technologies
 
@@ -681,7 +681,7 @@ docker-compose exec minio mc mb /data/vehicle-images
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
-## 🤝 Contribution
+## Contribution
 
 ### Workflow Git
 
@@ -708,17 +708,17 @@ git push origin feature/ma-fonctionnalite
 - `test:` Ajout de tests
 - `chore:` Maintenance (dépendances, config)
 
-## 📝 Licence
+## Licence
 
 Ce projet est un projet éducatif développé dans le cadre d'un apprentissage des technologies NestJS et Next.js.
 
-## 👤 Auteur
+## Auteur
 
-**Développé avec ❤️ et ☕ par l'équipe Togo Car Rental**
+**Développé par l'équipe Togo Car Rental**
 
 ---
 
-## 🎓 Notes Pédagogiques
+## Notes Pédagogiques
 
 Ce projet implémente des concepts avancés pour servir de référence :
 
