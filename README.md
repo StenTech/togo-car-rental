@@ -1,10 +1,10 @@
 # Togo Car Rental
 
-Application web moderne de gestion de location de véhicules, développée avec une architecture monorepo full-stack.
+Application web moderne de gestion de flotte de véhicules, développée avec une architecture monorepo full-stack.
 
 ## Vue d'ensemble
 
-**Togo Car Rental** est une plateforme complète permettant la gestion des véhicules, des réservations et des utilisateurs. Le projet implémente une architecture Clean avec séparation stricte des responsabilités, suivant les principes SOLID et les meilleures pratiques de développement.
+**Togo Car Rental** est une plateforme complète de gestion de flotte permettant la gestion centralisée des véhicules, des réservations internes et des utilisateurs. Le projet implémente une architecture Clean avec séparation stricte des responsabilités, suivant les principes SOLID et les meilleures pratiques de développement.
 
 ## Quick Start - Démarrage Rapide (5 minutes)
 
@@ -82,18 +82,18 @@ npm run dev  # ✅ Frontend démarre sur http://localhost:3000
 
 ### Fonctionnalités principales
 
-#### Pour les utilisateurs
+#### Pour les utilisateurs (Employés)
 - **Authentification sécurisée** : Inscription/Connexion avec JWT + HttpOnly Cookies
-- **Réservation de véhicules** : Système de réservation avec détection de conflits
-- **Catalogue de véhicules** : Consultation des véhicules disponibles avec images
+- **Réservation de véhicules** : Système de réservation interne avec détection de conflits
+- **Consultation de la flotte** : Visualisation des véhicules disponibles avec images
 - **Profil utilisateur** : Gestion des informations personnelles
 
-#### Pour les administrateurs
-- **Gestion des véhicules** : CRUD complet (Création, Lecture, Mise à jour, Suppression)
+#### Pour les administrateurs (Gestionnaires de flotte)
+- **Gestion de la flotte** : CRUD complet des véhicules (Création, Lecture, Mise à jour, Suppression)
 - **Upload d'images** : Stockage MinIO avec génération automatique d'URLs signées
-- **Tableau de bord** : Vue d'ensemble des statistiques
-- **Gestion des utilisateurs** : Administration des comptes
-- **Gestion des réservations** : Validation et suivi des réservations
+- **Tableau de bord** : Vue d'ensemble des statistiques de la flotte
+- **Gestion des employés** : Administration des comptes utilisateurs
+- **Gestion des réservations** : Validation et suivi des demandes de réservation
 
 ## Stack Technique
 
