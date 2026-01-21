@@ -377,7 +377,6 @@ Content-Type: multipart/form-data
   "model": "Corolla",
   "year": 2024,
   "plate": "TG-123-AB",
-  "pricePerDay": 25000,
   "status": "AVAILABLE",
   "image": <fichier>
 }
@@ -398,7 +397,6 @@ Authorization: Bearer <token>
 Content-Type: application/json
 
 {
-  "pricePerDay": 30000,
   "status": "MAINTENANCE"
 }
 ```
@@ -575,7 +573,6 @@ model Vehicle {
   model        String
   year         Int
   plate        String        @unique
-  pricePerDay  Float
   imageUrl     String?
   status       VehicleStatus @default(AVAILABLE)
   reservations Reservation[]
@@ -593,7 +590,6 @@ model Reservation {
   startDate       DateTime
   endDate         DateTime
   status          ReservationStatus @default(PENDING)
-  totalPrice      Float
   reason          String?
   user            User              @relation(...)
   vehicle         Vehicle           @relation(...)
